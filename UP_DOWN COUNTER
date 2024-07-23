@@ -1,4 +1,4 @@
-// verilog code
+// Verilog code
 module up_down_counter(clk,rst,up_down,q);
   input logic clk,rst,up_down;
   output logic [3:0] q;
