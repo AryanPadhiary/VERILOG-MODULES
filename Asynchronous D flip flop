@@ -1,0 +1,64 @@
+module d_flip_flop_async (
+    input wire clk,
+    input wire reset,
+    input wire d,
+    output reg q
+);
+    always @(posedge clk or posedge reset) begin
+        if (reset)
+            q <= 1'b0;
+        else
+            q <= d;
+    end
+endmodule
+module tb_d_flip_flop_async;
+    reg clk;
+    reg reset;
+    reg d;
+    wire q;
+    
+    // Instantiate the D flip-flop
+    d_flip_flop_async uut (
+        .clk(clk),
+        .reset(reset),
+        .d(d),
+        .q(q)
+    );
+    
+    // Clock generation
+    always #5 clk = ~clk;
+    
+    // Testbench code
+    initial begin
+        // Initialize inputs
+        clk = 0;
+        reset = 0;
+        d = 0;
+        
+        // Apply reset
+        #10 reset = 1;
+        #10 reset = 0;
+        
+        // Apply some test values to D
+        #10 d = 1;
+        #10 d = 0;
+        #10 d = 1;
+        #10 d = 0;
+        
+        // Apply reset again
+        #10 reset = 1;
+        #10 reset = 0;
+        
+        // Continue with test values
+        #10 d = 1;
+        #10 d = 0;
+        
+        // End simulation
+        #20 $stop;
+    end
+    
+    // Monitor output
+    initial begin
+        $monitor("Time = %0d, clk = %b, reset = %b, d = %b, q = %b", $time, clk, reset, d, q);
+    end
+endmodule
